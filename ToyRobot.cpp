@@ -1,6 +1,7 @@
 #include "ToyRobot.h"
 
 #include <iostream>
+#include <vector>
 
 //---------------------------------------------------------------------------------------------------------------------
 const int ToyRobot::GridSize = 5;
@@ -100,7 +101,7 @@ void ToyRobot::TurnRight()
 //---------------------------------------------------------------------------------------------------------------------
 void ToyRobot::Report()
 {
-   std::cout << m_x << "," << m_y << "," << m_facing << std::endl;
+   std::cout << "Output: " << m_x << "," << m_y << "," << m_facing << std::endl;
 }
 //---------------------------------------------------------------------------------------------------------------------
 bool ToyRobot::Move()
@@ -166,9 +167,30 @@ bool ToyRobot::PerformCommand(const std::string& input)
       int y = 0;
       std::string f;
 
-      comdList >> x;
-      comdList >> y;
-      comdList >> f;
+      std::string temp;
+      std::vector<std::string> params;
+      while(std::getline(comdList, temp, ',')) 
+      {
+         params.push_back(temp);
+      }
+
+      if (params.size() != 3)
+      {
+         std::cout << "PLACE expects 3 arguments. " << params.size() << " were given." << std::endl;
+         return false;
+      }
+
+      try
+      {
+         x = std::stoi(params[0]);
+         y = std::stoi(params[1]);
+         f = params[2];
+      }
+      catch(const std::exception& e)
+      {
+         std::cerr << "Error in conversion: " << e.what() << std::endl;
+         return false;
+      }
 
       if (ValidatePlaceCommand(x, y, f) == false)
       {
@@ -215,7 +237,7 @@ bool ToyRobot::PerformCommand(const std::string& input)
 void ToyRobot::Run()
 {
    std::cout << "Welcome to ToyRobot!" << std::endl;
-   std::cout << "Please begin with the 'PLACE' command. Eg, \"PLACE 0 0 NORTH\"" << std::endl;
+   std::cout << "Please begin with the 'PLACE' command. Eg, \"PLACE 0,0,NORTH\"" << std::endl;
 
    while (true)
    {

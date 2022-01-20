@@ -12,12 +12,12 @@ int RunTests()
    assert(toyRobot.PerformCommand(ToyRobot::CommandMove) == false);
 
    //test place position out of bounds
-   assert(toyRobot.PerformCommand("PLACE 10 0 NORTH") == false);
+   assert(toyRobot.PerformCommand("PLACE 10,0,NORTH") == false);
    //other commands should still fail
    assert(toyRobot.PerformCommand(ToyRobot::CommandLeft) == false);
 
    //test place position
-   assert(toyRobot.PerformCommand("PLACE 0 0 NORTH") == true);
+   assert(toyRobot.PerformCommand("PLACE 0,0,NORTH") == true);
    assert(toyRobot.GetX() == 0);
    assert(toyRobot.GetY() == 0);
    assert(toyRobot.GetFacing() == ToyRobot::CommandNorth);
@@ -106,8 +106,9 @@ int RunTests()
 
    //test bad entries
    assert(toyRobot.PerformCommand("PLACE 0 0 NORTHEAST") == false);
-   assert(toyRobot.PerformCommand("PLACE bad 0 NORTHEAST") == false);
-   assert(toyRobot.PerformCommand("PLACE 0 0") == false);
+   assert(toyRobot.PerformCommand("PLACE bad,0,NORTHEAST") == false);
+    assert(toyRobot.PerformCommand("PLACE bad,0,NORTHEAST,0,00,0,00,0") == false);
+   assert(toyRobot.PerformCommand("PLACE 0,0") == false);
    assert(toyRobot.PerformCommand("bad") == false);
    assert(toyRobot.PerformCommand("") == false);
 
